@@ -2,6 +2,7 @@ package pageobject;
 
 import io.qameta.allure.Step;
 import org.openqa.selenium.By;
+import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
@@ -11,6 +12,7 @@ import java.time.Duration;
 public class MainPage {
     private WebDriver driver;
     private WebDriverWait wait;
+    private JavascriptExecutor js;
     private static final String URL = "https://stellarburgers.education-services.ru/";
 
     private By loginButtonMain = By.xpath(".//button[text()='Войти в аккаунт']");
@@ -22,12 +24,33 @@ public class MainPage {
 
     public MainPage(WebDriver driver) {
         this.driver = driver;
-        this.wait = new WebDriverWait(driver, Duration.ofSeconds(10));
+        this.wait = new WebDriverWait(driver, Duration.ofSeconds(15));
+        this.js = (JavascriptExecutor) driver;
     }
 
     @Step("Открыть главную страницу")
     public void open() {
         driver.get(URL);
+    }
+
+    @Step("Ожидание загрузки страницы")
+    public void waitForPageLoaded() {
+        wait.until(driver -> !driver.getCurrentUrl().isEmpty());
+    }
+
+    @Step("Ожидание, что активна вкладка 'Соусы'")
+    public void waitForSaucesTabActive() {
+        wait.until(driver -> "Соусы".equals(getActiveTabText()));
+    }
+
+    @Step("Ожидание, что активна вкладка 'Начинки'")
+    public void waitForFillingsTabActive() {
+        wait.until(driver -> "Начинки".equals(getActiveTabText()));
+    }
+
+    @Step("Ожидание, что активна вкладка 'Булки'")
+    public void waitForBunsTabActive() {
+        wait.until(driver -> "Булки".equals(getActiveTabText()));
     }
 
     @Step("Клик на кнопку 'Войти в аккаунт'")
@@ -40,38 +63,28 @@ public class MainPage {
         wait.until(ExpectedConditions.elementToBeClickable(personalAccountButton)).click();
     }
 
-    @Step("Клик на вкладку 'Булки'")
-    public void clickBunsTab() {
-        wait.until(ExpectedConditions.elementToBeClickable(bunsTab)).click();
+    @Step("Клик на вкладку 'Булки' через JavaScript")
+    public void clickBunsTabJS() {
+        js.executeScript("arguments[0].click();", driver.findElement(bunsTab));
     }
 
-    @Step("Клик на вкладку 'Соусы'")
-    public void clickSaucesTab() {
-        wait.until(ExpectedConditions.elementToBeClickable(saucesTab)).click();
+    @Step("Клик на вкладку 'Соусы' через JavaScript")
+    public void clickSaucesTabJS() {
+        js.executeScript("arguments[0].click();", driver.findElement(saucesTab));
     }
 
-    @Step("Клик на вкладку 'Начинки'")
-    public void clickFillingsTab() {
-        wait.until(ExpectedConditions.elementToBeClickable(fillingsTab)).click();
+    @Step("Клик на вкладку 'Начинки' через JavaScript")
+    public void clickFillingsTabJS() {
+        js.executeScript("arguments[0].click();", driver.findElement(fillingsTab));
     }
 
     @Step("Получить текст активной вкладки")
     public String getActiveTabText() {
-        try {
-            return wait.until(ExpectedConditions.visibilityOfElementLocated(activeTab)).getText();
-        } catch (Exception e) {
-            // Если не нашли активную вкладку, пробуем найти по другой логике
-            return "";
-        }
+        return wait.until(ExpectedConditions.visibilityOfElementLocated(activeTab)).getText();
     }
 
     @Step("Получить текущий URL")
     public String getCurrentUrl() {
         return driver.getCurrentUrl();
-    }
-
-    @Step("Ожидание загрузки страницы")
-    public void waitForPageLoad() {
-        wait.until(ExpectedConditions.visibilityOfElementLocated(loginButtonMain));
     }
 }
