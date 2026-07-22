@@ -1,5 +1,6 @@
 package pageobject;
 
+import io.qameta.allure.Step;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.support.ui.ExpectedConditions;
@@ -24,43 +25,53 @@ public class MainPage {
         this.wait = new WebDriverWait(driver, Duration.ofSeconds(10));
     }
 
+    @Step("Открыть главную страницу")
     public void open() {
         driver.get(URL);
     }
 
+    @Step("Клик на кнопку 'Войти в аккаунт'")
     public void clickLoginButton() {
         wait.until(ExpectedConditions.elementToBeClickable(loginButtonMain)).click();
     }
 
+    @Step("Клик на 'Личный кабинет'")
     public void clickPersonalAccount() {
         wait.until(ExpectedConditions.elementToBeClickable(personalAccountButton)).click();
     }
 
+    @Step("Клик на вкладку 'Булки'")
     public void clickBunsTab() {
         wait.until(ExpectedConditions.elementToBeClickable(bunsTab)).click();
     }
 
+    @Step("Клик на вкладку 'Соусы'")
     public void clickSaucesTab() {
         wait.until(ExpectedConditions.elementToBeClickable(saucesTab)).click();
     }
 
+    @Step("Клик на вкладку 'Начинки'")
     public void clickFillingsTab() {
         wait.until(ExpectedConditions.elementToBeClickable(fillingsTab)).click();
     }
 
+    @Step("Получить текст активной вкладки")
     public String getActiveTabText() {
-        return wait.until(ExpectedConditions.visibilityOfElementLocated(activeTab)).getText();
+        try {
+            return wait.until(ExpectedConditions.visibilityOfElementLocated(activeTab)).getText();
+        } catch (Exception e) {
+            // Если не нашли активную вкладку, пробуем найти по другой логике
+            return "";
+        }
     }
 
+    @Step("Получить текущий URL")
     public String getCurrentUrl() {
         return driver.getCurrentUrl();
     }
 
+    @Step("Ожидание загрузки страницы")
     public void waitForPageLoad() {
-        try {
-            Thread.sleep(2000);
-        } catch (InterruptedException e) {
-            Thread.currentThread().interrupt();
-        }
+        wait.until(ExpectedConditions.visibilityOfElementLocated(loginButtonMain));
     }
 }

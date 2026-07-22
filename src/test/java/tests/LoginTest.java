@@ -1,15 +1,20 @@
 package tests;
 
 import api.UserApi;
+import io.qameta.allure.Description;
+import io.qameta.allure.junit4.DisplayName;
 import io.restassured.response.Response;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.support.ui.WebDriverWait;
 import pageobject.LoginPage;
 import pageobject.MainPage;
 import pageobject.RegisterPage;
 import pageobject.WebDriverFactory;
+
+import java.time.Duration;
 
 import static org.junit.Assert.*;
 
@@ -22,11 +27,13 @@ public class LoginTest {
     private String accessToken;
     private String userEmail;
     private String userPassword;
+    private WebDriverWait wait;
 
     @Before
     public void setUp() {
         driver = WebDriverFactory.getDriver();
         driver.manage().window().maximize();
+        wait = new WebDriverWait(driver, Duration.ofSeconds(10));
         mainPage = new MainPage(driver);
         loginPage = new LoginPage(driver);
         registerPage = new RegisterPage(driver);
@@ -50,11 +57,13 @@ public class LoginTest {
     }
 
     @Test
+    @DisplayName("Вход через кнопку 'Войти в аккаунт' на главной")
+    @Description("Проверка, что пользователь может войти через кнопку на главной странице")
     public void loginViaMainPageButton() {
         mainPage.open();
         mainPage.clickLoginButton();
         loginPage.login(userEmail, userPassword);
-        mainPage.open(); // Принудительный переход на главную после входа
+        mainPage.open();
 
         assertEquals("https://stellarburgers.education-services.ru/", driver.getCurrentUrl());
         accessToken = userApi.getAccessToken(userEmail, userPassword);
@@ -62,11 +71,13 @@ public class LoginTest {
     }
 
     @Test
+    @DisplayName("Вход через кнопку 'Личный кабинет'")
+    @Description("Проверка, что пользователь может войти через личный кабинет")
     public void loginViaPersonalAccount() {
         mainPage.open();
         mainPage.clickPersonalAccount();
         loginPage.login(userEmail, userPassword);
-        mainPage.open(); // Принудительный переход на главную после входа
+        mainPage.open();
 
         assertEquals("https://stellarburgers.education-services.ru/", driver.getCurrentUrl());
         accessToken = userApi.getAccessToken(userEmail, userPassword);
@@ -74,13 +85,15 @@ public class LoginTest {
     }
 
     @Test
+    @DisplayName("Вход через форму регистрации")
+    @Description("Проверка, что пользователь может войти через ссылку в форме регистрации")
     public void loginViaRegisterPage() {
         mainPage.open();
         mainPage.clickPersonalAccount();
         loginPage.clickRegisterLink();
         registerPage.clickLoginLink();
         loginPage.login(userEmail, userPassword);
-        mainPage.open(); // Принудительный переход на главную после входа
+        mainPage.open();
 
         assertEquals("https://stellarburgers.education-services.ru/", driver.getCurrentUrl());
         accessToken = userApi.getAccessToken(userEmail, userPassword);
@@ -88,13 +101,15 @@ public class LoginTest {
     }
 
     @Test
+    @DisplayName("Вход через форму восстановления пароля")
+    @Description("Проверка, что пользователь может войти через ссылку в форме восстановления пароля")
     public void loginViaForgotPasswordPage() {
         mainPage.open();
         mainPage.clickPersonalAccount();
         loginPage.clickForgotPasswordLink();
         loginPage.clickLoginLink();
         loginPage.login(userEmail, userPassword);
-        mainPage.open(); // Принудительный переход на главную после входа
+        mainPage.open();
 
         assertEquals("https://stellarburgers.education-services.ru/", driver.getCurrentUrl());
         accessToken = userApi.getAccessToken(userEmail, userPassword);
