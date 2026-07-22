@@ -12,7 +12,7 @@ public class WebDriverFactory {
         options.addArguments("--remote-allow-origins=*");
 
         if ("yandex".equalsIgnoreCase(BROWSER)) {
-            System.setProperty("webdriver.chrome.driver", "src/test/resources/yandexdriver.exe");
+            options.setBinary("C:\\Program Files\\Yandex\\YandexBrowser\\Application\\browser.exe");
         }
 
         return new ChromeDriver(options);
