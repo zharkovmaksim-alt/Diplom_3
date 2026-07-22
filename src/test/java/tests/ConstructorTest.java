@@ -35,9 +35,7 @@ public class ConstructorTest {
     public void bunsTabIsActiveByDefault() {
         mainPage.open();
         mainPage.waitForPageLoaded();
-        String activeTab = mainPage.getActiveTabText();
-        System.out.println("Активная вкладка по умолчанию: " + activeTab);
-        assertEquals("Булки", activeTab);
+        assertEquals("Булки", mainPage.getActiveTabText());
     }
 
     @Test
@@ -46,15 +44,14 @@ public class ConstructorTest {
     public void switchToSaucesTab() {
         mainPage.open();
         mainPage.waitForPageLoaded();
-        mainPage.clickSaucesTabJS();
+        mainPage.clickSaucesTab();
+        // Ждём смены активной вкладки
         try {
             Thread.sleep(3000);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
-        String activeTab = mainPage.getActiveTabText();
-        System.out.println("Активная вкладка после клика на Соусы: " + activeTab);
-        assertEquals("Соусы", activeTab);
+        assertEquals("Соусы", mainPage.getActiveTabText());
     }
 
     @Test
@@ -63,15 +60,13 @@ public class ConstructorTest {
     public void switchToFillingsTab() {
         mainPage.open();
         mainPage.waitForPageLoaded();
-        mainPage.clickFillingsTabJS();
+        mainPage.clickFillingsTab();
         try {
             Thread.sleep(3000);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
-        String activeTab = mainPage.getActiveTabText();
-        System.out.println("Активная вкладка после клика на Начинки: " + activeTab);
-        assertEquals("Начинки", activeTab);
+        assertEquals("Начинки", mainPage.getActiveTabText());
     }
 
     @Test
@@ -80,20 +75,18 @@ public class ConstructorTest {
     public void switchBackToBunsTab() {
         mainPage.open();
         mainPage.waitForPageLoaded();
-        mainPage.clickSaucesTabJS();
+        mainPage.clickSaucesTab();
         try {
             Thread.sleep(3000);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
-        mainPage.clickBunsTabJS();
+        mainPage.clickBunsTab();
         try {
             Thread.sleep(3000);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
-        String activeTab = mainPage.getActiveTabText();
-        System.out.println("Активная вкладка после клика на Булки: " + activeTab);
-        assertEquals("Булки", activeTab);
+        assertEquals("Булки", mainPage.getActiveTabText());
     }
 }

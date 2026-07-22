@@ -63,19 +63,19 @@ public class MainPage {
         wait.until(ExpectedConditions.elementToBeClickable(personalAccountButton)).click();
     }
 
-    @Step("Клик на вкладку 'Булки' через JavaScript")
-    public void clickBunsTabJS() {
-        js.executeScript("arguments[0].click();", driver.findElement(bunsTab));
+    @Step("Клик на вкладку 'Булки'")
+    public void clickBunsTab() {
+        wait.until(ExpectedConditions.elementToBeClickable(bunsTab)).click();
     }
 
-    @Step("Клик на вкладку 'Соусы' через JavaScript")
-    public void clickSaucesTabJS() {
-        js.executeScript("arguments[0].click();", driver.findElement(saucesTab));
+    @Step("Клик на вкладку 'Соусы'")
+    public void clickSaucesTab() {
+        wait.until(ExpectedConditions.elementToBeClickable(saucesTab)).click();
     }
 
-    @Step("Клик на вкладку 'Начинки' через JavaScript")
-    public void clickFillingsTabJS() {
-        js.executeScript("arguments[0].click();", driver.findElement(fillingsTab));
+    @Step("Клик на вкладку 'Начинки'")
+    public void clickFillingsTab() {
+        wait.until(ExpectedConditions.elementToBeClickable(fillingsTab)).click();
     }
 
     @Step("Получить текст активной вкладки")
@@ -86,5 +86,20 @@ public class MainPage {
     @Step("Получить текущий URL")
     public String getCurrentUrl() {
         return driver.getCurrentUrl();
+    }
+
+    @Step("Проверить, что вкладка 'Булки' отображается")
+    public boolean isBunsTabDisplayed() {
+        return wait.until(ExpectedConditions.visibilityOfElementLocated(bunsTab)).isDisplayed();
+    }
+
+    @Step("Проверить, что вкладка 'Соусы' отображается")
+    public boolean isSaucesTabDisplayed() {
+        return wait.until(ExpectedConditions.visibilityOfElementLocated(saucesTab)).isDisplayed();
+    }
+
+    @Step("Проверить, что вкладка 'Начинки' отображается")
+    public boolean isFillingsTabDisplayed() {
+        return wait.until(ExpectedConditions.visibilityOfElementLocated(fillingsTab)).isDisplayed();
     }
 }
