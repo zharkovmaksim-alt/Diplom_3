@@ -9,25 +9,19 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 import java.time.Duration;
 
 public class RegisterPage {
-    private WebDriver driver;
-    private WebDriverWait wait;
-    private static final String URL = "https://stellarburgers.education-services.ru/register";
+    private final WebDriver driver;
+    private final WebDriverWait wait;
 
-    private By nameField = By.xpath(".//label[text()='Имя']/following-sibling::input");
-    private By emailField = By.xpath(".//label[text()='Email']/following-sibling::input");
-    private By passwordField = By.xpath(".//input[@type='password']");
-    private By registerButton = By.xpath(".//button[text()='Зарегистрироваться']");
-    private By loginLink = By.xpath(".//a[@class='Auth_link__1fOlj' and text()='Войти']");
-    private By errorMessage = By.xpath(".//p[contains(@class, 'input__error')]");
+    private final By nameField = By.xpath(".//input[@name='name']");
+    private final By emailField = By.xpath(".//input[@name='name']");
+    private final By passwordField = By.xpath(".//input[@type='password']");
+    private final By registerButton = By.xpath(".//button[text()='Зарегистрироваться']");
+    private final By loginLink = By.xpath(".//a[text()='Войти']");
+    private final By errorMessage = By.xpath(".//p[contains(@class, 'error')]");
 
     public RegisterPage(WebDriver driver) {
         this.driver = driver;
-        this.wait = new WebDriverWait(driver, Duration.ofSeconds(10));
-    }
-
-    @Step("Открыть страницу регистрации")
-    public void open() {
-        driver.get(URL);
+        this.wait = new WebDriverWait(driver, Duration.ofSeconds(15));
     }
 
     @Step("Ввести имя: {name}")
@@ -66,7 +60,8 @@ public class RegisterPage {
     @Step("Получить сообщение об ошибке")
     public String getErrorMessage() {
         try {
-            return wait.until(ExpectedConditions.visibilityOfElementLocated(errorMessage)).getText();
+            WebDriverWait shortWait = new WebDriverWait(driver, Duration.ofSeconds(3));
+            return shortWait.until(ExpectedConditions.visibilityOfElementLocated(errorMessage)).getText();
         } catch (Exception e) {
             return "";
         }

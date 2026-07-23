@@ -13,12 +13,12 @@ public class LoginPage {
     private WebDriverWait wait;
     private static final String URL = "https://stellarburgers.education-services.ru/login";
 
-    private By emailField = By.xpath(".//input[@name='name']");
-    private By passwordField = By.xpath(".//input[@type='password']");
-    private By loginButton = By.xpath(".//button[text()='Войти']");
-    private By registerLink = By.xpath(".//a[text()='Зарегистрироваться']");
-    private By forgotPasswordLink = By.xpath(".//a[text()='Восстановить пароль']");
-    private By loginLink = By.xpath(".//a[text()='Войти']");
+    private final By emailField = By.xpath(".//input[@name='name']");
+    private final By passwordField = By.xpath(".//input[@type='password']");
+    private final By loginButton = By.xpath(".//button[text()='Войти']");
+    private final By registerLink = By.xpath(".//a[text()='Зарегистрироваться']");
+    private final By forgotPasswordLink = By.xpath(".//a[text()='Восстановить пароль']");
+    private final By loginLink = By.xpath(".//a[text()='Войти']");
 
     public LoginPage(WebDriver driver) {
         this.driver = driver;
@@ -65,5 +65,14 @@ public class LoginPage {
         setEmail(email);
         setPassword(password);
         clickLoginButton();
+    }
+
+    @Step("Ожидание редиректа на главную страницу после логина")
+    public void waitForRedirectToMain() {
+        wait.until(driver -> {
+            String url = driver.getCurrentUrl();
+            return url.equals("https://stellarburgers.education-services.ru/") ||
+                    url.equals("https://stellarburgers.education-services.ru");
+        });
     }
 }
